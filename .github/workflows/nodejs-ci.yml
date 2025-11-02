@@ -8,6 +8,7 @@ name: Node.js CI
       - main
   workflow_dispatch: null
 jobs:
+ # Build---------------------------------------------------------------------------------------
   build:
     name: Build & Test
     runs-on: ubuntu-latest
@@ -23,27 +24,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '${{ matrix.node-version }}'
-          
-      - name: Cache node modules
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: '${{ runner.os }}-node-${{ hashFiles(''**/package-lock.json'') }}'
-          restore-keys: |
-            ${{ runner.os }}-node-
             
       - name: Install dependencies
         run: npm ci
         
       - name: Run test script
         run: npm test
-        
-      - name: Upload test results or build artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: build Node.js
-          path: ./, !node_modules/
-         # ---------------------------------------------------------------------------------------
+         # Snyk---------------------------------------------------------------------------------------
   snyk-scan:
     name: Snyk Security Scan
     needs: build
