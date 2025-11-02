@@ -28,4 +28,10 @@ jobs:
       - name: Run tests (Hello World)
         run: npm test
 
-      
+  #Run Snyk scan (SAST)
+      - name: Snyk Security Scan
+        uses: snyk/actions/node@master
+        with:
+          command: test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}    
